@@ -119,7 +119,9 @@ function toggleVolumeState() {
   }
 }
 // Change Playback Speed -------------------- //
-
+function setPlayBackSpeed(e) {
+  video.playbackRate = e.target.value;
+}
 // Fullscreen ------------------------------- //
 
 // *Event Listener
@@ -139,3 +141,4 @@ volumeRange.addEventListener("click", updateVolumePosition);
 volumeIcon.addEventListener("click", toggleVolumeState);
 
 // playback speed
+playbackSpeed.addEventListener("change", setPlayBackSpeed);
