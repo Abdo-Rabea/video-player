@@ -68,6 +68,7 @@ function updateTimeElements() {
   const duration = video.duration;
   timeElapsed.textContent = `${getTimeInMintSec(currentTime)} /`;
   progressBar.style.width = `${Math.round((currentTime / duration) * 100)}%`;
+  timeDuration.textContent = getTimeInMintSec(duration);
 }
 
 function updatePlayBackPosition(e) {
