@@ -32,6 +32,9 @@ body {
   background: black;
   position: relative;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
 }
 
 video {

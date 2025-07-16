@@ -12,6 +12,8 @@ const volumeBar = document.querySelector(".volume-bar");
 const volumeIcon = document.getElementById("volume-icon");
 
 const playbackSpeed = document.querySelector("select");
+
+const fullScreenIcon = document.querySelector(".fullscreen");
 // Play & Pause ----------------------------------- //
 // function to playVideo
 function changePlayIconToPause() {
@@ -123,7 +125,46 @@ function setPlayBackSpeed(e) {
   video.playbackRate = e.target.value;
 }
 // Fullscreen ------------------------------- //
+let isFullScreen = false;
 
+function openFullscreen() {
+  if (videoContainer.requestFullscreen) {
+    videoContainer.requestFullscreen();
+  } else if (videoContainer.webkitRequestFullscreen) {
+    /* Safari */
+    videoContainer.webkitRequestFullscreen();
+  } else if (videoContainer.msRequestFullscreen) {
+    /* IE11 */
+    videoContainer.msRequestFullscreen();
+  }
+}
+
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    /* IE11 */
+    document.msExitFullscreen();
+  }
+}
+
+function toggleFullScreen() {
+  if (isFullScreen) {
+    closeFullscreen();
+    isFullScreen = false;
+    fullScreenIcon.childNodes[0].classList.replace("fa-compress", "fa-expand");
+    fullScreenIcon.title = "Expand";
+  } else {
+    openFullscreen();
+    isFullScreen = true;
+    fullScreenIcon.childNodes[0].classList.replace("fa-expand", "fa-compress");
+    fullScreenIcon.title = "Compress";
+  }
+}
 // *Event Listener
 // video play-pause
 videoContainer.addEventListener("click", videoContainerTogglePlaying);
@@ -142,3 +183,5 @@ volumeIcon.addEventListener("click", toggleVolumeState);
 
 // playback speed
 playbackSpeed.addEventListener("change", setPlayBackSpeed);
+
+fullScreenIcon.addEventListener("click", toggleFullScreen);
