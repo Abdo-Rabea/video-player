@@ -9,7 +9,9 @@ const timeDuration = document.querySelector(".time-duration");
 
 const volumeRange = document.querySelector(".volume-range");
 const volumeBar = document.querySelector(".volume-bar");
+const volumeIcon = document.getElementById("volume-icon");
 
+const playbackSpeed = document.querySelector("select");
 // Play & Pause ----------------------------------- //
 // function to playVideo
 function changePlayIconToPause() {
@@ -74,8 +76,48 @@ function updatePlayBackPosition(e) {
   // then updateTimeElements to keep time elments updated with the play back
   updateTimeElements();
 }
-// Volume Controls --------------------------- //
-function updateVolumePosition() {}
+// *Volume Controls --------------------------- //
+// update progress bar position and icon
+function updateVolumeElements(ratio, mute = false) {
+  const percent = ratio * 100;
+  // volumeBar width changing
+  volumeBar.style.width = `${percent}%`;
+
+  // volume icon
+  volumeIcon.classList = ["fas"];
+  volumeIcon.title = "Mute";
+  if (mute) {
+    volumeIcon.classList.add("fa-volume-xmark");
+    volumeIcon.title = "Unmute";
+  } else {
+    if (percent == 0) volumeIcon.classList.add("fa-volume-off");
+    else if (percent < 60) volumeIcon.classList.add("fa-volume-low");
+    else volumeIcon.classList.add("fa-volume-high");
+  }
+}
+function updateVolumePosition(e) {
+  // calc. the ratio between clicked position to the progress-range length
+  let ratio = e.offsetX / this.clientWidth;
+  if (ratio < 0.09) ratio = 0;
+  if (ratio > 0.92) ratio = 1;
+  // *updating volume
+  video.volume = ratio;
+  video.muted = false; // insures that volume is not muted
+  // then updateTimeElements to keep time elments updated with the play back
+  updateVolumeElements(ratio, false);
+}
+
+// toggle volume state (mute-unmute)
+function toggleVolumeState() {
+  // todo: should seperate in 2 different function (mute, unmute)
+  if (video.muted) {
+    video.muted = false;
+    updateVolumeElements(video.volume, false);
+  } else {
+    video.muted = true;
+    updateVolumeElements(0, true);
+  }
+}
 // Change Playback Speed -------------------- //
 
 // Fullscreen ------------------------------- //
@@ -94,3 +136,6 @@ progressRange.addEventListener("click", updatePlayBackPosition);
 
 // Volume Eventlistener
 volumeRange.addEventListener("click", updateVolumePosition);
+volumeIcon.addEventListener("click", toggleVolumeState);
+
+// playback speed
